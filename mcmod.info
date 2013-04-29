@@ -1,0 +1,17 @@
+[
+{
+  "modid": "NNNPC",
+  "name": "NNNPC",
+  "description": "This mod adds items which control NPCs",
+  "version": "1.5.1.06",
+  "mcversion": "1.5.1",
+  "logoFile": "",
+  "url": "http://goo.gl/YC99T",
+  "updateUrl": "",
+  "authors": ["takap"],
+  "credits": "created by takap",
+  "parent": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
