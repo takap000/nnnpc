@@ -43,7 +43,7 @@ public class ItemSoulStone extends Item
         npc.setOwnerName(entityPlayer.username);
         world.spawnEntityInWorld(npc);
         itemStack.stackSize--;
-        world.playSoundAtEntity(entityPlayer, "random.glass", this.itemRand.nextFloat() * 1.0f, 1.0f);
+        world.playSoundAtEntity(entityPlayer, "random.glass", itemRand.nextFloat() * 1.0f, 1.0f);
         return true;
     }
 }

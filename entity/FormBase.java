@@ -169,7 +169,7 @@ public abstract class FormBase {
         try {
             Class[] parameters = new Class[]{ ModelBase.class, Float.TYPE };
             Constructor constructor = rendererClass.getConstructor(parameters);
-            return (RenderLiving)constructor.newInstance((ModelBase)modelClass.newInstance(), getShadowSize());
+            return (RenderLiving)constructor.newInstance(modelClass.newInstance(), getShadowSize());
         }
         catch ( Exception e ) {
             Utility.printWarning("failed to get constructor in getRenderer() @ CustomableNpcModel");

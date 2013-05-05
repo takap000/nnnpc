@@ -7,7 +7,6 @@ import org.lwjgl.opengl.GL11;
 
 import takap.mods.nnnpc.entity.EntityNpc;
 import takap.mods.nnnpc.entity.EnumMode;
-import takap.mods.nnnpc.entity.RoleBase;
 import takap.mods.nnnpc.packet.PacketNpcModeChangeEvent;
 import takap.mods.nnnpc.packet.PacketNpcTeleportEvent;
 import takap.mods.nnnpc.texture.Texture;
@@ -154,6 +153,7 @@ public class PartyManager
         for ( int i=0; i<size; i++ )
         {
             EntityNpc npc = this.memberList.get(i);
+            
             // 生存チェック, party参加可能なroleかチェック, 同じworldかチェック
             if ( npc == null || npc.isDead || !npc.getRole().canFollow() || !npc.worldObj.equals(minecraft.theWorld) )
             {
@@ -171,8 +171,8 @@ public class PartyManager
             return;
         }
         
-        float widthCoefficient = 1.0F / (float)texture.getWidth();
-        float heightCoefficient = 1.0F / (float)texture.getHeight();
+        float widthCoefficient = 1.0f / texture.getWidth();
+        float heightCoefficient = 1.0f / texture.getHeight();
         int iconWidth = 16;
         int iconHeight = 16;
         int posX = initialIconOffsetX;
@@ -223,11 +223,11 @@ public class PartyManager
             mc.renderEngine.resetBoundTexture();
             tessellator = Tessellator.instance;
             tessellator.startDrawingQuads();
-            tessellator.setColorOpaque_I(0xffffff);
-            tessellator.addVertexWithUV(posX + 0, posY + iconHeight, -1.0f, (float)(texX + 0) * widthCoefficient, (float)(texY + texHeight) * heightCoefficient);
-            tessellator.addVertexWithUV(posX + iconWidth, posY + iconHeight, -1.0f, (float)(texX + texWidth) * widthCoefficient, (float)(texY + texHeight) * heightCoefficient);
-            tessellator.addVertexWithUV(posX + iconWidth, posY + 0, -1.0f, (float)(texX + texWidth) * widthCoefficient, (float)(texY + 0) * heightCoefficient);
-            tessellator.addVertexWithUV(posX + 0, posY + 0, -1.0f, (float)(texX + 0) * widthCoefficient, (float)(texY + 0) * heightCoefficient);
+            tessellator.setColorOpaque_I(Utility.colorWhite);
+            tessellator.addVertexWithUV(posX + 0, posY + iconHeight, -1.0f, (texX + 0) * widthCoefficient, (texY + texHeight) * heightCoefficient);
+            tessellator.addVertexWithUV(posX + iconWidth, posY + iconHeight, -1.0f, (texX + texWidth) * widthCoefficient, (texY + texHeight) * heightCoefficient);
+            tessellator.addVertexWithUV(posX + iconWidth, posY + 0, -1.0f, (texX + texWidth) * widthCoefficient, (texY + 0) * heightCoefficient);
+            tessellator.addVertexWithUV(posX + 0, posY + 0, -1.0f, (texX + 0) * widthCoefficient, (texY + 0) * heightCoefficient);
             tessellator.draw();
             GL11.glPopMatrix();
         }

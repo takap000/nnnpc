@@ -2,7 +2,7 @@ package takap.mods.nnnpc.entity;
 
 import takap.mods.nnnpc.gui.GuiNpcSetting;
 import takap.mods.nnnpc.gui.GuiSubpageBase;
-import takap.mods.nnnpc.gui.GuiSubpageRoleForFollower;
+import takap.mods.nnnpc.gui.GuiSubpageRoleForMedic;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -27,7 +27,7 @@ public class RoleMedic extends RoleBase
             int guiBottom, int guiLeft, int guiRight, int top, int bottom,
             int right, int left)
     {
-        return new GuiSubpageRoleForFollower(guiNpcSetting, entityPlayer, npc, mc, guiTop, guiBottom, guiLeft, guiRight, top, bottom, right, left);
+        return new GuiSubpageRoleForMedic(guiNpcSetting, entityPlayer, npc, mc, guiTop, guiBottom, guiLeft, guiRight, top, bottom, right, left);
     }
     
     @Override

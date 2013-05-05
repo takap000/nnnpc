@@ -64,7 +64,7 @@ public class NpcAIWatchOwner extends EntityAIBase
             return false;
         }
 
-        if ( this.npc.getDistanceSqToEntity(this.closestEntity) > (double)(this.range * this.range) )
+        if ( this.npc.getDistanceSqToEntity(this.closestEntity) > (this.range * this.range) )
         {
             return false;
         }
@@ -89,7 +89,7 @@ public class NpcAIWatchOwner extends EntityAIBase
     @Override
     public void updateTask()
     {
-        this.npc.getLookHelper().setLookPosition(this.closestEntity.posX, this.closestEntity.posY + (double)closestEntity.getEyeHeight(), this.closestEntity.posZ, 10F, this.npc.getVerticalFaceSpeed());
+        this.npc.getLookHelper().setLookPosition(this.closestEntity.posX, this.closestEntity.posY + this.closestEntity.getEyeHeight(), this.closestEntity.posZ, 10F, this.npc.getVerticalFaceSpeed());
         this.watchDuration--;
     }
 }

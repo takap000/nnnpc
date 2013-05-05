@@ -44,6 +44,7 @@ public class NamedLocation
     {
         try
         {
+            @SuppressWarnings("unused")
             int value;
             value = Integer.parseInt(this.coordinateX);
             value = Integer.parseInt(this.coordinateY);

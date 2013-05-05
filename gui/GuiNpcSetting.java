@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
@@ -223,13 +222,13 @@ public class GuiNpcSetting extends GuiScreen
         GL11.glDisable(GL11.GL_FOG);
         Tessellator var2 = Tessellator.instance;
         this.mc.renderEngine.bindTexture(Utility.settingPageBackgroundImage);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        float var3 = 16.0F;
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        float var3 = 16.0f;
         var2.startDrawingQuads();
-        var2.addVertexWithUV((double)this.guiLeft, (double)this.guiBottom, 0.0D, 0.0D, (double)((float)this.ySize / var3 + 0.0f));
-        var2.addVertexWithUV((double)this.guiRight, (double)this.guiBottom, 0.0D, (double)((float)this.xSize / var3), (double)((float)this.ySize / var3 + 0.0f));
-        var2.addVertexWithUV((double)this.guiRight, (double)this.guiTop, 0.0D, (double)((float)this.xSize / var3), 0.0f);
-        var2.addVertexWithUV((double)this.guiLeft, (double)this.guiTop, 0.0d, 0.0d, 0.0d);
+        var2.addVertexWithUV(this.guiLeft, this.guiBottom, 0.0d, 0.0d, (this.ySize/var3 + 0.0f));
+        var2.addVertexWithUV(this.guiRight, this.guiBottom, 0.0d, (this.xSize/var3), (this.ySize/var3 + 0.0f));
+        var2.addVertexWithUV(this.guiRight, this.guiTop, 0.0d, (this.xSize/var3), 0.0f);
+        var2.addVertexWithUV(this.guiLeft, this.guiTop, 0.0d, 0.0d, 0.0d);
         var2.draw();
         
         // subpageのbackgroundを重ねて描画
@@ -248,7 +247,7 @@ public class GuiNpcSetting extends GuiScreen
         int size = this.overwrappingButtonList.size();
         for ( int i=0; i<size; i++ )
         {
-            GuiButton button = (GuiButton)this.overwrappingButtonList.get(i);
+            GuiButton button = this.overwrappingButtonList.get(i);
             button.drawButton(this.mc, par1, par2);
         }
         GL11.glTranslatef(0f, 0f, 1f);
@@ -371,7 +370,7 @@ public class GuiNpcSetting extends GuiScreen
             }
             for ( int i=0; i<this.overwrappingButtonList.size(); i++ )
             {
-                GuiButton button = (GuiButton)this.overwrappingButtonList.get(i);
+                GuiButton button = this.overwrappingButtonList.get(i);
                 if ( button.mousePressed(this.mc, x, y) )
                 {
                     this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);

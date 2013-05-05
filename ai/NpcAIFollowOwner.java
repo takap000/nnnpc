@@ -51,7 +51,7 @@ public class NpcAIFollowOwner extends EntityAIBase
         }
 
         double distanceSq = this.npc.getDistanceSqToEntity(entityliving);
-        if (distanceSq < (double)(minDist * minDist))
+        if (distanceSq < (minDist * minDist))
         {
             return false;
         }
@@ -66,7 +66,7 @@ public class NpcAIFollowOwner extends EntityAIBase
     {
         if ( !this.pathNavigate.noPath() )
         {
-            if ( this.npc.getDistanceSqToEntity(this.owner) > (double)(this.maxDist * this.maxDist) )
+            if ( this.npc.getDistanceSqToEntity(this.owner) > (this.maxDist * this.maxDist) )
             {
                 return true;
             }
@@ -105,7 +105,7 @@ public class NpcAIFollowOwner extends EntityAIBase
             return;
         }
 
-        if ( this.npc.getDistanceSqToEntity(this.owner) < 144D )
+        if ( this.npc.getDistanceSqToEntity(this.owner) < 144d )
         {
             return;
         }
@@ -120,7 +120,7 @@ public class NpcAIFollowOwner extends EntityAIBase
             {
                 if ( (l<1 || i1<1 || l>3 || i1>3) && this.world.isBlockNormalCube(i + l, k - 1, j + i1) && !this.world.isBlockNormalCube(i+l, k, j+i1) && !this.world.isBlockNormalCube(i+l, k+1, j+i1) )
                 {
-                    this.npc.setLocationAndAngles((float)(i+l) + 0.5F, k, (float)(j+i1) + 0.5F, this.npc.rotationYaw, this.npc.rotationPitch);
+                    this.npc.setLocationAndAngles((i+l) + 0.5f, k, (j+i1) + 0.5f, this.npc.rotationYaw, this.npc.rotationPitch);
                     this.pathNavigate.clearPathEntity();
                     return;
                 }

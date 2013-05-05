@@ -13,21 +13,21 @@ public class GuiSubpageGeneral extends GuiSubpageBase
 {
     private GuiTextField nameTextField;
     private GuiUtilityButton nameShowButton;
-    private GuiUtilityButton speedPlusPlusButton;
+//    private GuiUtilityButton speedPlusPlusButton;
     private GuiUtilityButton speedPlusButton;
     private GuiUtilityButton speedMinusButton;
-    private GuiUtilityButton speedMinusMinusButton;
+//    private GuiUtilityButton speedMinusMinusButton;
     private GuiUtilityButton respawnButton;
     private GuiUtilityButton respawnUpdateButton;
-    private GuiUtilityButton lifePlusPlusButton;
+//    private GuiUtilityButton lifePlusPlusButton;
     private GuiUtilityButton lifePlusButton;
     private GuiUtilityButton lifeMinusButton;
-    private GuiUtilityButton lifeMinusMinusButton;
+//    private GuiUtilityButton lifeMinusMinusButton;
     private GuiUtilityButton lifeShowButton;
-    private GuiUtilityButton strengthPlusPlusButton;
+//    private GuiUtilityButton strengthPlusPlusButton;
     private GuiUtilityButton strengthPlusButton;
     private GuiUtilityButton strengthMinusButton;
-    private GuiUtilityButton strengthMinusMinusButton;
+//    private GuiUtilityButton strengthMinusMinusButton;
     private GuiUtilityButton expButton;
     private final int lineHeight = 16;
     private final int labelOffsetX = 10;

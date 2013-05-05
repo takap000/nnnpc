@@ -281,12 +281,12 @@ public class GuiSubpageLocation extends GuiSubpageBase
             
             // 登録されているスクリーンショット描画
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getImageIndex());
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
             tessellator.startDrawingQuads();
-            tessellator.addVertexWithUV((double)this.locationImageOffsetX, (double)this.locationImageOffsetY+(double)this.imageHeight, 0.0d, 0.0d, 1.0d);
-            tessellator.addVertexWithUV((double)this.locationImageOffsetX+(double)this.imageWidth, (double)this.locationImageOffsetY+(double)this.imageHeight, 0.0D, 1.0d, 1.0d);
-            tessellator.addVertexWithUV((double)this.locationImageOffsetX+(double)this.imageWidth, (double)this.locationImageOffsetY, 0.0d, 1.0d, 0.0d);
-            tessellator.addVertexWithUV((double)this.locationImageOffsetX, (double)this.locationImageOffsetY, 0.0d, 0.0d, 0.0d);
+            tessellator.addVertexWithUV(this.locationImageOffsetX, this.locationImageOffsetY+this.imageHeight, 0.0d, 0.0d, 1.0d);
+            tessellator.addVertexWithUV(this.locationImageOffsetX+this.imageWidth, this.locationImageOffsetY+this.imageHeight, 0.0D, 1.0d, 1.0d);
+            tessellator.addVertexWithUV(this.locationImageOffsetX+this.imageWidth, this.locationImageOffsetY, 0.0d, 1.0d, 0.0d);
+            tessellator.addVertexWithUV(this.locationImageOffsetX, this.locationImageOffsetY, 0.0d, 0.0d, 0.0d);
             tessellator.draw();
         }
     }

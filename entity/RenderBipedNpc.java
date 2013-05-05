@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.RenderEngine;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.EntityLiving;
@@ -16,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 import takap.mods.nnnpc.texture.Texture;
-import takap.mods.nnnpc.texture.TextureManager;
 import takap.mods.nnnpc.utility.Utility;
 
 public class RenderBipedNpc extends RenderLiving
@@ -43,7 +41,7 @@ public class RenderBipedNpc extends RenderLiving
         if ( texture.getImageIndex() >= 0 )
         {
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getImageIndex());
-            // glBindTexture()の後は忘れずに！
+            // glBindTexture()の後はresetBoundTexture()を忘れずに！
             this.renderManager.renderEngine.resetBoundTexture();
         	return;
         }
@@ -118,7 +116,7 @@ public class RenderBipedNpc extends RenderLiving
         EntityNpc npc = (EntityNpc)par1EntityLiving;
         float f = par1EntityLiving.getDistanceToEntity(this.renderManager.livingPlayer);
 
-        if (f > (float)par9)
+        if (f > par9)
         {
             return;
         }
@@ -168,7 +166,7 @@ public class RenderBipedNpc extends RenderLiving
         EntityNpc npc = (EntityNpc)par1EntityLiving;
         float f = par1EntityLiving.getDistanceToEntity(renderManager.livingPlayer);
 
-        if (f > (float)par9)
+        if (f > par9)
         {
             return;
         }
@@ -203,7 +201,7 @@ public class RenderBipedNpc extends RenderLiving
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         tessellator2.startDrawingQuads();
         int j = 24;
-        int currentLife = (int)(2.0D * (double)j * (double)npc.getHealth() / (double)npc.getMaxHealth());
+        int currentLife = (int)(2.0d * j * npc.getHealth() / npc.getMaxHealth());
         tessellator2.setColorRGBA_I(npc.getLifeColor(), 196);
         tessellator2.addVertex(-j, 1, 0.0D);
         tessellator2.addVertex(-j, 5, 0.0D);

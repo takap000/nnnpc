@@ -28,7 +28,6 @@ public class GuiLocationRecorder extends GuiScreen
     private int posY;
     private int posZ;
     
-    private String imageTempFilePath;
     private BufferedImage tempImage;
     private int tempImageIndex;
     
@@ -42,6 +41,7 @@ public class GuiLocationRecorder extends GuiScreen
     
     // GUIの縁
     private int guiTop;
+    @SuppressWarnings("unused")
     private int guiBottom;
     private int guiLeft;
     private int guiRight;
@@ -187,10 +187,10 @@ public class GuiLocationRecorder extends GuiScreen
         Minecraft.getMinecraft().renderEngine.resetBoundTexture();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV((double)this.newLocationImageOffsetX, (double)this.imageOffsetY+(double)this.imageHeight, 0.0d, 0.0d, 1.0d);
-        tessellator.addVertexWithUV((double)this.newLocationImageOffsetX+(double)this.imageWidth, (double)this.imageOffsetY+(double)this.imageHeight, 0.0D, 1.0d, 1.0d);
-        tessellator.addVertexWithUV((double)this.newLocationImageOffsetX+(double)this.imageWidth, (double)this.imageOffsetY, 0.0d, 1.0d, 0.0d);
-        tessellator.addVertexWithUV((double)this.newLocationImageOffsetX, (double)this.imageOffsetY, 0.0d, 0.0d, 0.0d);
+        tessellator.addVertexWithUV(this.newLocationImageOffsetX, this.imageOffsetY+this.imageHeight, 0.0d, 0.0d, 1.0d);
+        tessellator.addVertexWithUV(this.newLocationImageOffsetX+this.imageWidth, this.imageOffsetY+this.imageHeight, 0.0d, 1.0d, 1.0d);
+        tessellator.addVertexWithUV(this.newLocationImageOffsetX+this.imageWidth, this.imageOffsetY, 0.0d, 1.0d, 0.0d);
+        tessellator.addVertexWithUV(this.newLocationImageOffsetX, this.imageOffsetY, 0.0d, 0.0d, 0.0d);
         tessellator.draw();
         
         // 保存されているLocationの画像を表示
@@ -226,10 +226,10 @@ public class GuiLocationRecorder extends GuiScreen
             }
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getImageIndex());
             var2.startDrawingQuads();
-            var2.addVertexWithUV((double)this.loadedLocationImageOffsetX, (double)this.imageOffsetY+(double)this.imageHeight, 0.0d, 0.0d, 1.0d);
-            var2.addVertexWithUV((double)this.loadedLocationImageOffsetX+(double)this.imageWidth, (double)this.imageOffsetY+(double)this.imageHeight, 0.0D, 1.0d, 1.0d);
-            var2.addVertexWithUV((double)this.loadedLocationImageOffsetX+(double)this.imageWidth, (double)this.imageOffsetY, 0.0d, 1.0d, 0.0d);
-            var2.addVertexWithUV((double)this.loadedLocationImageOffsetX, (double)this.imageOffsetY, 0.0d, 0.0d, 0.0d);
+            var2.addVertexWithUV(this.loadedLocationImageOffsetX, this.imageOffsetY+this.imageHeight, 0.0d, 0.0d, 1.0d);
+            var2.addVertexWithUV(this.loadedLocationImageOffsetX+this.imageWidth, this.imageOffsetY+this.imageHeight, 0.0d, 1.0d, 1.0d);
+            var2.addVertexWithUV(this.loadedLocationImageOffsetX+this.imageWidth, this.imageOffsetY, 0.0d, 1.0d, 0.0d);
+            var2.addVertexWithUV(this.loadedLocationImageOffsetX, this.imageOffsetY, 0.0d, 0.0d, 0.0d);
             var2.draw();
         }
     }

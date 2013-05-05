@@ -6,7 +6,6 @@ import takap.mods.nnnpc.entity.RoleBase;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.PathEntity;
-import net.minecraft.util.MathHelper;
 
 
 public class NpcAIHealOnCollidePartyMember extends EntityAIBase
@@ -123,10 +122,7 @@ public class NpcAIHealOnCollidePartyMember extends EntityAIBase
         else
         {
             this.actionTick = this.actionInterval;
-            if ( this.npc.healEntity(targetEntity) )
-            {
-                this.npc.swingItem();
-            }
+            this.npc.healEntity(targetEntity);
             // アイテム不足などでhealに失敗しても，targetとpathをリセットする
             resetTask();
             return;

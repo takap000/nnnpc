@@ -12,7 +12,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 @Mod(
     modid = "NNNPC_Miko",
     name  = "NNNPC_Miko",
-    version = "1.5.1.01"
+    version = "1.5.2.01"
 )
 @NetworkMod(
     clientSideRequired = true,

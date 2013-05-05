@@ -82,13 +82,13 @@ public abstract class GuiSubpageBase
     {
         Tessellator var2 = Tessellator.instance;
         this.mc.renderEngine.bindTexture(this.backgroundImage);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        float var3 = 8.0F;
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        float var3 = 8.0f;
         var2.startDrawingQuads();
-        var2.addVertexWithUV((double)0, (double)this.height, 0.0D, 0.0D, (double)(height / var3 + 0.0f));
-        var2.addVertexWithUV((double)this.width, (double)this.height, 0.0D, (double)(width / var3), (double)(height / var3 + 0.0f));
-        var2.addVertexWithUV((double)this.width, (double)0, 0.0D, (double)(width / var3), 0.0f);
-        var2.addVertexWithUV((double)0, (double)0, 0.0d, 0.0d, 0.0d);
+        var2.addVertexWithUV(0d, this.height, 0d, 0d, (height/var3 + 0f));
+        var2.addVertexWithUV(this.width, this.height, 0d, (width/var3), (height/var3 + 0f));
+        var2.addVertexWithUV(this.width, 0d, 0d, (width/var3), 0f);
+        var2.addVertexWithUV(0d, 0d, 0d, 0d, 0d);
         var2.draw();
     }
     
@@ -166,10 +166,10 @@ public abstract class GuiSubpageBase
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
         tessellator.setColorRGBA_F(0f, 0f, 0f, 0.8f);
-        tessellator.addVertex((double)this.mc.displayWidth, 0d, 0d);
+        tessellator.addVertex(this.mc.displayWidth, 0d, 0d);
         tessellator.addVertex(0d, 0d, 0d);
-        tessellator.addVertex(0d, (double)this.mc.displayHeight, 0d);
-        tessellator.addVertex((double)this.mc.displayWidth, (double)this.mc.displayHeight, 0d);
+        tessellator.addVertex(0d, this.mc.displayHeight, 0d);
+        tessellator.addVertex(this.mc.displayWidth, this.mc.displayHeight, 0d);
         tessellator.draw();
         GL11.glShadeModel(GL11.GL_FLAT);
         GL11.glDisable(GL11.GL_BLEND);

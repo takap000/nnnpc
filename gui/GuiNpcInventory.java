@@ -114,7 +114,6 @@ public class GuiNpcInventory extends GuiContainer
     @Override
     protected void drawGuiContainerBackgroundLayer(float f, int i, int j)
     {
-        int k = mc.renderEngine.getTexture(Utility.inventoryBackgroundImage);
         GL11.glPushMatrix();
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         mc.renderEngine.bindTexture(Utility.inventoryBackgroundImage);
@@ -140,8 +139,8 @@ public class GuiNpcInventory extends GuiContainer
 
     private void drawIcon()
     {
-        float widthCoefficient = 1.0f / (float)this.npc.getNpcTexture().getWidth();
-        float heightCoefficient = 1.0f / (float)this.npc.getNpcTexture().getHeight();
+        float widthCoefficient = 1.0f / this.npc.getNpcTexture().getWidth();
+        float heightCoefficient = 1.0f / this.npc.getNpcTexture().getHeight();
         int iconWidth = 32;
         int iconHeight = 32;
         int posX = guiLeft + 8;
@@ -166,10 +165,10 @@ public class GuiNpcInventory extends GuiContainer
             Tessellator tessellator = Tessellator.instance;
             tessellator.startDrawingQuads();
             tessellator.setColorOpaque_I(0xffffff);
-            tessellator.addVertexWithUV(posX + 0, posY + iconHeight, -1.0f, (float)(texX + 0) * widthCoefficient, (float)(texY + texHeight) * heightCoefficient);
-            tessellator.addVertexWithUV(posX + iconWidth, posY + iconHeight, -1.0f, (float)(texX + texWidth) * widthCoefficient, (float)(texY + texHeight) * heightCoefficient);
-            tessellator.addVertexWithUV(posX + iconWidth, posY + 0, -1.0f, (float)(texX + texWidth) * widthCoefficient, (float)(texY + 0) * heightCoefficient);
-            tessellator.addVertexWithUV(posX + 0, posY + 0, -1.0f, (float)(texX + 0) * widthCoefficient, (float)(texY + 0) * heightCoefficient);
+            tessellator.addVertexWithUV(posX + 0, posY + iconHeight, -1.0f, (texX + 0) * widthCoefficient, (texY + texHeight) * heightCoefficient);
+            tessellator.addVertexWithUV(posX + iconWidth, posY + iconHeight, -1.0f, (texX + texWidth) * widthCoefficient, (texY + texHeight) * heightCoefficient);
+            tessellator.addVertexWithUV(posX + iconWidth, posY + 0, -1.0f, (texX + texWidth) * widthCoefficient, (texY + 0) * heightCoefficient);
+            tessellator.addVertexWithUV(posX + 0, posY + 0, -1.0f, (texX + 0) * widthCoefficient, (texY + 0) * heightCoefficient);
             tessellator.draw();
             GL11.glPopMatrix();
         }

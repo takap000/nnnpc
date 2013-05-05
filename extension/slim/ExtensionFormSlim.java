@@ -12,7 +12,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 @Mod(
     modid = "NNNPC_Slim",
     name  = "NNNPC_Slim",
-    version = "1.5.1.01"
+    version = "1.5.2.01"
 )
 @NetworkMod(
     clientSideRequired = true,

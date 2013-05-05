@@ -33,18 +33,16 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
 
 @Mod(
     modid = "NNNPC",
     name  = "NNNPC",
-    version = "1.5.1.06"
+    version = "1.5.2.01"
 )
 @NetworkMod(
     clientSideRequired = true,
@@ -56,6 +54,7 @@ import net.minecraft.item.ItemStack;
             Utility.settingEventChannelName,
             Utility.lifeSettingEventChannelName,
             Utility.swingEventChannelName,
+            Utility.healEventChannelName,
             Utility.modeChangeEventChannelName,
             Utility.teleportEventChannelName,
             Utility.guiCloseEventChannelName

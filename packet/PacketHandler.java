@@ -21,39 +21,43 @@ public class PacketHandler implements IPacketHandler
         // なんか  もっと  いい  判別方法が  あるんじゃ  なかろうか  ？  staticで多態性的ななにか...
         if ( packet.channel.equals(PacketNpcInitializeEvent.channel) )
         {
-            packetBase = new PacketNpcInitializeEvent((Packet250CustomPayload)packet);
+            packetBase = new PacketNpcInitializeEvent(packet);
         }
         else if ( packet.channel.equals(PacketNpcSettingEvent.channel) )
         {
-            packetBase = new PacketNpcSettingEvent((Packet250CustomPayload)packet);
+            packetBase = new PacketNpcSettingEvent(packet);
         }
         else if ( packet.channel.equals(PacketNpcDeleteEvent.channel) )
         {
-            packetBase = new PacketNpcDeleteEvent((Packet250CustomPayload)packet);
+            packetBase = new PacketNpcDeleteEvent(packet);
         }
         else if ( packet.channel.equals(PacketNpcSpawnEvent.channel) )
         {
-            packetBase = new PacketNpcSpawnEvent((Packet250CustomPayload)packet);
+            packetBase = new PacketNpcSpawnEvent(packet);
         }
         else if ( packet.channel.equals(PacketNpcLifeSettingEvent.channel) )
         {
-            packetBase = new PacketNpcLifeSettingEvent((Packet250CustomPayload)packet);
+            packetBase = new PacketNpcLifeSettingEvent(packet);
         }
         else if ( packet.channel.equals(PacketNpcSwingEvent.channel) )
         {
-            packetBase = new PacketNpcSwingEvent((Packet250CustomPayload)packet);
+            packetBase = new PacketNpcSwingEvent(packet);
+        }
+        else if ( packet.channel.equals(PacketNpcHealEvent.channel) )
+        {
+            packetBase = new PacketNpcHealEvent(packet);
         }
         else if ( packet.channel.equals(PacketNpcModeChangeEvent.channel) )
         {
-            packetBase = new PacketNpcModeChangeEvent((Packet250CustomPayload)packet);
+            packetBase = new PacketNpcModeChangeEvent(packet);
         }
         else if ( packet.channel.equals(PacketNpcTeleportEvent.channel) )
         {
-            packetBase = new PacketNpcTeleportEvent((Packet250CustomPayload)packet);
+            packetBase = new PacketNpcTeleportEvent(packet);
         }
         else if ( packet.channel.equals(PacketNpcGuiCloseEvent.channel) )
         {
-            packetBase = new PacketNpcGuiCloseEvent((Packet250CustomPayload)packet);
+            packetBase = new PacketNpcGuiCloseEvent(packet);
         }
         
         if ( packetBase != null )

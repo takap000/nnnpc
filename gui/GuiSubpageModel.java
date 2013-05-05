@@ -1,7 +1,5 @@
 package takap.mods.nnnpc.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import takap.mods.nnnpc.entity.EntityNpc;
 import takap.mods.nnnpc.entity.FormManager;
 import takap.mods.nnnpc.utility.Utility;
@@ -19,10 +17,10 @@ public class GuiSubpageModel extends GuiSubpageBase
     private GuiUtilityButton roleNextButton;
     private GuiUtilityButton modePreviousButton;
     private GuiUtilityButton modeNextButton;
-    private GuiUtilityButton scalePlusPlusButton;
+//    private GuiUtilityButton scalePlusPlusButton;
     private GuiUtilityButton scalePlusButton;
     private GuiUtilityButton scaleMinusButton;
-    private GuiUtilityButton scaleMinusMinusButton;
+//    private GuiUtilityButton scaleMinusMinusButton;
     private GuiUtilityButton dominantHandPreviousButton;
     private GuiUtilityButton dominantHandNextButton;
     private GuiUtilityButton textureListPreviousButton;

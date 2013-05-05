@@ -16,6 +16,7 @@ import takap.mods.nnnpc.ai.NpcAIWatchOwner;
 import takap.mods.nnnpc.gui.EnumGuiPage;
 import takap.mods.nnnpc.inventory.InventoryNpc;
 import takap.mods.nnnpc.location.NamedLocation;
+import takap.mods.nnnpc.packet.PacketNpcHealEvent;
 import takap.mods.nnnpc.packet.PacketNpcInitializeEvent;
 import takap.mods.nnnpc.packet.PacketNpcLifeSettingEvent;
 import takap.mods.nnnpc.packet.PacketNpcSwingEvent;
@@ -52,7 +53,6 @@ import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
-//import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.world.World;
 
 public abstract class EntityNpc extends EntityCreature implements IEntityAdditionalSpawnData
@@ -87,6 +87,9 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
     private InventoryNpc inventory;
     private int dominantHandIndex;
     private int healOtherThreshold;
+    private final int initialHealOtherThreshold = 50;
+    private final int minHealOtherThreshold = 20;
+    private final int maxHealOtherThreshold = 80;
     private boolean canGenerateExp;
     // Location関連
     private NamedLocation[] locationList;
@@ -128,7 +131,7 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
             actionList[i] = new NPCAction();
         }
         setDominantHandIndex(0);
-        setHealOtherThreshold(50);
+        setHealOtherThreshold(this.initialHealOtherThreshold);
         setCanGenerateExp(false);
     }
 
@@ -136,16 +139,6 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
     public boolean isAIEnabled()
     {
         return true;
-    }
-    
-    @Override
-    public void setDead()
-    {
-        if ( !this.worldObj.isRemote )
-        {
-            dropAllItems();
-        }
-        super.setDead();
     }
     
     @Override
@@ -241,9 +234,10 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
         nbtTagCompound.setString("ownerName", getOwnerName());
         nbtTagCompound.setTag("inventory", getInventory().writeToNBT(new NBTTagList()));
         nbtTagCompound.setTag("locationList", getLocationNBTTagList());
-        nbtTagCompound.setTag("actionList", this.getNPCActionNBTTagList());
-        nbtTagCompound.setInteger("dominantHandIndex", this.dominantHandIndex);
+        nbtTagCompound.setTag("actionList", getNPCActionNBTTagList());
+        nbtTagCompound.setInteger("dominantHandIndex", getDominantHandIndex());
         nbtTagCompound.setBoolean("canGenerateExp", canGenerateExp());
+        nbtTagCompound.setInteger("healOtherThreshold", getHealOtherThreshold());
     }
     
     @Override
@@ -270,6 +264,7 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
         setNPCActionList(nbtTagCompound.getTagList("actionList"));
         setDominantHandIndex(nbtTagCompound.getInteger("dominantHandIndex"));
         setCanGenerateExp(nbtTagCompound.getBoolean("canGenerateExp"));
+        setHealOtherThreshold(nbtTagCompound.getInteger("healOtherThreshold"));
     }
     
     public void writeCoreParameterToNBT(NBTTagCompound nbtTagCompound)
@@ -290,9 +285,10 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
         nbtTagCompound.setString("ownerName", getOwnerName());
         nbtTagCompound.setTag("inventory", getInventory().writeToNBT(new NBTTagList()));
         nbtTagCompound.setTag("locationList", getLocationNBTTagList());
-        nbtTagCompound.setTag("actionList", this.getNPCActionNBTTagList());
-        nbtTagCompound.setInteger("dominantHandIndex", this.dominantHandIndex);
+        nbtTagCompound.setTag("actionList", getNPCActionNBTTagList());
+        nbtTagCompound.setInteger("dominantHandIndex", getDominantHandIndex());
         nbtTagCompound.setBoolean("canGenerateExp", canGenerateExp());
+        nbtTagCompound.setInteger("healOtherThreshold", getHealOtherThreshold());
     }
 
     public void readCoreParameterFromNBT(NBTTagCompound nbtTagCompound)
@@ -314,6 +310,7 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
         setNPCActionList(nbtTagCompound.getTagList("actionList"));
         setDominantHandIndex(nbtTagCompound.getInteger("dominantHandIndex"));
         setCanGenerateExp(nbtTagCompound.getBoolean("canGenerateExp"));
+        setHealOtherThreshold(nbtTagCompound.getInteger("healOtherThreshold"));
     }
     
     public void copyCoreParameterFrom(EntityNpc targetNpc)
@@ -434,7 +431,20 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
         }
         else
         {
-            super.onDeathUpdate();
+            this.deathTime++;
+            if (this.deathTime == 20)
+            {
+                dropAllItems();
+                setDead();
+
+                for ( int i=0; i<20; i++ )
+                {
+                    double d0 = this.rand.nextGaussian() * 0.02d;
+                    double d1 = this.rand.nextGaussian() * 0.02d;
+                    double d2 = this.rand.nextGaussian() * 0.02d;
+                    this.worldObj.spawnParticle("explode", this.posX + (this.rand.nextFloat() * this.width * 2.0f) - this.width, this.posY + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 2.0f) - this.width, d0, d1, d2);
+                }
+            }
         }
     }
     
@@ -497,7 +507,6 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
             i -= 2 << getActivePotionEffect(Potion.weakness).getAmplifier();
         }
         
-        // TODO: 経験値ドロップは設定でon/off切り替え？
         // "Exp on"の場合はExpオーブを出すため，オーナーからの0ポイントダメージ付加
         if ( canGenerateExp() )
         {
@@ -771,20 +780,14 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
     {
         String modeBefore = getMode().getModeName();
         changePreviousMode();
-        if ( this.worldObj.isRemote )
-        {
-            addChatMessage(player, "Mode: " + modeBefore + " -> " + getMode().getModeName());
-        }
+        addChatMessage(player, "Mode: " + modeBefore + " -> " + getMode().getModeName());
     }
     
     public void changeNextModeWithNotify(EntityPlayer player)
     {
         String modeBefore = getMode().getModeName();
         changeNextMode();
-        if ( this.worldObj.isRemote )
-        {
-            addChatMessage(player, "Mode: " + modeBefore + " -> " + getMode().getModeName());
-        }
+        addChatMessage(player, "Mode: " + modeBefore + " -> " + getMode().getModeName());
     }
     
     public RoleBase getRole()
@@ -928,7 +931,7 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
     {
         for ( int i=0; i<num; i++ )
         {
-            showParticle("heart", 0.0D, 0.0D, 0.0D);
+            showParticle("heart", 0.0d, 0.0d, 0.0d);
         }
     }
 
@@ -936,21 +939,18 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
     {
         for ( int i=0; i<num; i++ )
         {
-            showParticle("smoke", this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, rand.nextGaussian() * 0.02D);
+            showParticle("smoke", this.rand.nextGaussian() * 0.02d, this.rand.nextGaussian() * 0.02d, this.rand.nextGaussian() * 0.02d);
         }
     }
-
+    
     public void showNote(double d1, double d2, double d3)
     {
         showParticle("note", d1, d2, d3);
     }
-
+    
     private void showParticle(String s, double d, double d1, double d2)
     {
-        if ( !this.worldObj.isRemote )
-        {
-            this.worldObj.spawnParticle(s, (this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F)) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), (this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F)) - (double)this.width, d, d1, d2);
-        }
+        this.worldObj.spawnParticle(s, (this.posX + (this.rand.nextFloat() * this.width * 2.0f)) - this.width, this.posY + 0.5d + (this.rand.nextFloat() * this.height), (this.posZ + (this.rand.nextFloat() * this.width * 2.0f)) - this.width, d, d1, d2);
     }
     
     public int getLimitMaxHealth()
@@ -1058,6 +1058,10 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
             // TODO: 手抜きはやめよう！
             this.inventory = new InventoryNpc(this);
         }
+        else
+        {
+            dropAllItems();
+        }
         this.setDead();
     }
     
@@ -1072,7 +1076,7 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
         }
         if ( isInjured(owner.getHealth(), owner.getMaxHealth()) )
         {
-            return (EntityLiving)owner;
+            return owner;
         }
         
         // パーティーメンバーの負傷判定
@@ -1101,7 +1105,7 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
                             EntityNpc serverNpc = (EntityNpc)loadedEntityList.get(j);
                             if ( serverNpc.getNpcId().equals(npc.getNpcId()) )
                             {
-                                targetEntity = (EntityLiving)serverNpc;
+                                targetEntity = serverNpc;
                             }
                         }
                     }
@@ -1121,7 +1125,7 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
         return false;
     }
     
-    public boolean healEntity(EntityLiving entity)
+    public void healEntity(EntityLiving entity)
     {
         InventoryNpc inventory = this.getInventory();
         for ( int i=0; i<inventory.getSizeInventory(); i++ )
@@ -1137,10 +1141,34 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
                 int healAmount = MathHelper.floor_double((itemFood.getHealAmount()*0.75d));
                 entity.heal(healAmount>0?healAmount:1);
                 inventory.consumeInventoryItem(itemFood.itemID);
-                return true;
+                showHealEffect(entity.posX, entity.posY+entity.height/2, entity.posZ);
             }
         }
-        return false;
+    }
+    
+    public void showHealEffect(double x, double y, double z)
+    {
+        if ( !this.worldObj.isRemote )
+        {
+            PacketNpcHealEvent packet = new PacketNpcHealEvent(x, y, z);
+            packet.sendPacketToClient(this.worldObj, this, false);
+            return;
+        }
+        
+        // 回復エフェクト表示
+        double vRange = 0.8d;
+        double hRange = 1d;
+        for ( int i=0; i<7; i++ )
+        {
+            this.worldObj.spawnParticle("happyVillager", (this.rand.nextDouble()*hRange+x-hRange), (this.rand.nextDouble()*vRange+y), (this.rand.nextDouble()*hRange+z-hRange), 0d, 0d, 0d);
+        }
+        // 回復モーション
+        takeHealingAction();
+    }
+    
+    public void takeHealingAction()
+    {
+        swingItem();
     }
     
     @Override
@@ -1341,12 +1369,9 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
                     if (!entity.isDead && (entity instanceof EntityItem))
                     {
                         EntityItem entityItem = (EntityItem)entity;
-                        // func_92014 return ItemStack
-//                        if (entityItem.delayBeforeCanPickup == 0 && this.inventory.addItemStackToInventory(entityItem.func_92014_d()))
                         if (entityItem.delayBeforeCanPickup == 0 && this.inventory.addItemStackToInventory(entityItem.getEntityItem()))
                         {
                             this.worldObj.playSoundAtEntity(entity, "random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-//                            if (entityItem.func_92014_d().stackSize <= 0)
                             if ( entityItem.getEntityItem().stackSize <= 0)
                             {
                                 entityItem.setDead();
@@ -1409,28 +1434,42 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
 
     public float getLifeColorR()
     {
-        return (float)((getLifeColor()>>16) & 0xff) / 256F;
+        return ((getLifeColor()>>16) & 0xff) / 256f;
     }
 
     public float getLifeColorG()
     {
-        return (float)((getLifeColor()>>8) & 0xff) / 256F;
+        return ((getLifeColor()>>8) & 0xff) / 256f;
     }
 
     public float getLifeColorB()
     {
-        return (float)(getLifeColor() & 0x0000ff) / 256F;
+        return (getLifeColor() & 0x0000ff) / 256f;
     }
     
     public void teleportToOwner()
     {
         EntityPlayer owner = this.worldObj.getPlayerEntityByName(getOwnerName());
 
-        if ( this.getDistanceSqToEntity(owner) < 36D )
+        // npcとownerのworldチェック
+        int npcDimensionId = this.worldObj.provider.dimensionId;
+        int ownerDimensionId = owner.worldObj.provider.dimensionId;
+        if ( (npcDimensionId == ownerDimensionId) )
         {
-            return;
+            // 近くにいる場合は何もせず終了
+            if ( this.getDistanceSqToEntity(owner) < 25d )
+            {
+                return;
+            }
         }
-
+        // ownerと異なるworldにいる場合は同じworldに移動
+        else
+        {
+            // TODO: 異なるworldを参照する方法
+//            this.travelToDimension(ownerDimensionId);
+        }
+        
+        // 以下，ownerの近くにteleportする処理
         int i = MathHelper.floor_double(owner.posX) - 2;
         int j = MathHelper.floor_double(owner.posZ) - 2;
         int k = MathHelper.floor_double(owner.boundingBox.minY);
@@ -1441,7 +1480,7 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
             {
                 if ( (l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.worldObj.isBlockNormalCube(i + l, k - 1, j + i1) && !this.worldObj.isBlockNormalCube(i + l, k, j + i1) && !worldObj.isBlockNormalCube(i + l, k + 1, j + i1) )
                 {
-                    this.setLocationAndAngles((float)(i + l) + 0.5F, k, (float)(j + i1) + 0.5F, this.rotationYaw, this.rotationPitch);
+                    this.setLocationAndAngles((i + l) + 0.5f, k, (j + i1) + 0.5f, this.rotationYaw, this.rotationPitch);
                     this.getNavigator().clearPathEntity();
                     return;
                 }
@@ -1479,11 +1518,11 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
                 continue;
             }
 
-            EntityItem entityItem = new EntityItem(this.worldObj, this.posX, (this.posY + (double)getEyeHeight()), posZ, itemStack);
-            float motionWeight = 0.05F;
-            entityItem.motionX = (double)((float)this.rand.nextGaussian() * motionWeight);
-            entityItem.motionY = (double)((float)this.rand.nextGaussian() * motionWeight + 0.2F);
-            entityItem.motionZ = (double)((float)this.rand.nextGaussian() * motionWeight);
+            EntityItem entityItem = new EntityItem(this.worldObj, this.posX, (this.posY + getEyeHeight()), posZ, itemStack);
+            float motionWeight = 0.05f;
+            entityItem.motionX = this.rand.nextGaussian() * motionWeight;
+            entityItem.motionY = this.rand.nextGaussian() * motionWeight + 0.2f;
+            entityItem.motionZ = this.rand.nextGaussian() * motionWeight;
             if ( itemStack.hasTagCompound() )
             {
                 entityItem.getEntityItem().setTagCompound((NBTTagCompound)itemStack.getTagCompound().copy());
@@ -1502,7 +1541,21 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
     {
         this.healOtherThreshold = healOtherThreshold;
     }
-
+    
+    public void increaseHealOtherThreshold(int increment)
+    {
+        int threshold = getHealOtherThreshold() + increment;
+        if ( threshold > this.maxHealOtherThreshold )
+        {
+            threshold = this.maxHealOtherThreshold;
+        }
+        else if ( threshold < this.minHealOtherThreshold )
+        {
+            threshold = this.minHealOtherThreshold;
+        }
+        setHealOtherThreshold(threshold);
+    }
+    
     public boolean canGenerateExp()
     {
         return canGenerateExp;
@@ -1516,5 +1569,11 @@ public abstract class EntityNpc extends EntityCreature implements IEntityAdditio
     public void switchExpDrop()
     {
         setCanGenerateExp(!canGenerateExp());
+    }
+    
+    @Override
+    public int getPortalCooldown()
+    {
+        return 100;
     }
 }

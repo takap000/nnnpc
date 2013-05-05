@@ -11,21 +11,16 @@ import org.lwjgl.opengl.GL11;
 import takap.mods.nnnpc.mod_NNNPC;
 import takap.mods.nnnpc.texture.Texture;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderEngine;
-
 public class RecordedLocation
 {
     public static final int numberOfSlots = 16;
     
     private static RecordedLocation instance = new RecordedLocation();
-    private RenderEngine renderEngine;
     private NamedLocation[] locationList;
     private Texture[] textureList;
     
     private RecordedLocation()
     {
-        this.renderEngine = Minecraft.getMinecraft().renderEngine;
         loadLocation();
     }
     

@@ -17,6 +17,7 @@ public final class Utility
     public static final String settingEventChannelName         = "NNNPC_setting";
     public static final String lifeSettingEventChannelName     = "NNNPC_life";
     public static final String swingEventChannelName           = "NNNPC_swing";
+    public static final String healEventChannelName            = "NNNPC_heal";
     public static final String modeChangeEventChannelName      = "NNNPC_mode";
     public static final String teleportEventChannelName        = "NNNPC_teleport";
     public static final String guiCloseEventChannelName        = "NNNPC_close";
